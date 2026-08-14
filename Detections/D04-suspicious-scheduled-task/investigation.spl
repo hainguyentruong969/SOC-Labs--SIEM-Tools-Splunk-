@@ -1,0 +1,13 @@
+sourcetype="window-sysmon3"
+| rex field=_raw "<EventID>(?<EventID>\d+)</EventID>"
+| rex field=_raw "<Data Name='UtcTime'>(?<UtcTime>[^<]+)</Data>"
+| rex field=_raw "<Data Name='ProcessId'>(?<ProcessId>[^<]+)</Data>"
+| rex field=_raw "<Data Name='ParentProcessId'>(?<ParentProcessId>[^<]+)</Data>"
+| rex field=_raw "<Data Name='Image'>(?<Image>[^<]+)</Data>"
+| rex field=_raw "<Data Name='ParentImage'>(?<ParentImage>[^<]+)</Data>"
+| rex field=_raw "<Data Name='CommandLine'>(?<CommandLine>[^<]+)</Data>"
+| where EventID="1"
+| where UtcTime>="2020-12-07 12:36:12" AND UtcTime<="2020-12-07 12:36:15"
+| where ProcessId="4000" OR ProcessId="5040" OR ProcessId="872" OR ProcessId="5084" OR ProcessId="5064" OR ProcessId="4840"
+| sort UtcTime
+| table UtcTime ProcessId ParentProcessId ParentImage Image CommandLine

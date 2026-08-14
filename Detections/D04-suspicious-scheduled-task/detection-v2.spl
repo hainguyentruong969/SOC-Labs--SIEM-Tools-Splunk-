@@ -1,0 +1,16 @@
+sourcetype="window-sysmon3"
+| rex field=_raw "<EventID>(?<EventID>\d+)</EventID>"
+| rex field=_raw "<Computer>(?<Computer>[^<]+)</Computer>"
+| rex field=_raw "<Data Name='UtcTime'>(?<UtcTime>[^<]+)</Data>"
+| rex field=_raw "<Data Name='ProcessId'>(?<ProcessId>[^<]+)</Data>"
+| rex field=_raw "<Data Name='Image'>(?<Image>[^<]+)</Data>"
+| rex field=_raw "<Data Name='CommandLine'>(?<CommandLine>[^<]+)</Data>"
+| rex field=_raw "<Data Name='User'>(?<User>[^<]+)</Data>"
+| rex field=_raw "<Data Name='ParentImage'>(?<ParentImage>[^<]+)</Data>"
+| where EventID="1"
+| where match(lower(Image),"schtasks\.exe$")
+| where match(lower(CommandLine),"/create")
+| where match(lower(CommandLine),"/sc\s+onstart")
+| where match(lower(CommandLine),"/ru\s+system")
+| eval Technique="T1053.005", Detection="Suspicious Scheduled Task - Startup as SYSTEM"
+| table UtcTime Computer User Technique Detection ParentImage Image ProcessId CommandLine

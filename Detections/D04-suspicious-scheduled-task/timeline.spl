@@ -1,0 +1,17 @@
+sourcetype="window-sysmon3"
+| rex field=_raw "<EventID>(?<EventID>\d+)</EventID>"
+| rex field=_raw "<Computer>(?<Computer>[^<]+)</Computer>"
+| rex field=_raw "<Data Name='UtcTime'>(?<UtcTime>[^<]+)</Data>"
+| rex field=_raw "<Data Name='Image'>(?<Image>[^<]+)</Data>"
+| rex field=_raw "<Data Name='CommandLine'>(?<CommandLine>[^<]+)</Data>"
+| where EventID="1"
+| where Computer="win-dc-893.attackrange.local"
+| where match(lower(Image),"schtasks\.exe$")
+| where match(lower(CommandLine),"t1053_005_onstartup")
+| eval Action=case(
+    match(lower(CommandLine),"/create"),"CREATE",
+    match(lower(CommandLine),"/delete"),"DELETE",
+    true(),"OTHER"
+  )
+| sort UtcTime
+| table UtcTime Action Image CommandLine

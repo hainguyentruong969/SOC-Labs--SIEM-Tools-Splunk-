@@ -1,0 +1,6 @@
+source="o365_brute_force_login.json"
+Operation="UserLoginFailed"
+ClientIP="73.15.72.101"
+| stats count as Failures
+        dc(UserId) as TargetCount
+        values(UserId) as TargetUsers

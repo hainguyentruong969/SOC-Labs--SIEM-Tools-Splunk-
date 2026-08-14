@@ -1,0 +1,12 @@
+source="o365_brute_force_login.json"
+Operation="UserLoginFailed"
+| eval EventTime=strptime(substr(CreationTime,1,19),"%Y-%m-%dT%H:%M:%S")
+| bin EventTime span=5m
+| stats count as Failures
+        dc(ClientIP) as IPCount
+        values(ClientIP) as SourceIPs
+        by EventTime UserId
+| where Failures>=10
+| eval Window=strftime(EventTime,"%Y-%m-%d %H:%M:%S")
+| table Window UserId Failures IPCount SourceIPs
+| sort Window

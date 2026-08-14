@@ -1,0 +1,8 @@
+source="o365_brute_force_login.json"
+Operation="UserLoginFailed"
+| stats count as Failures
+        values(ClientIP) as SourceIPs
+        dc(ClientIP) as IPCount
+        by UserId
+| where Failures>=10
+| sort - Failures

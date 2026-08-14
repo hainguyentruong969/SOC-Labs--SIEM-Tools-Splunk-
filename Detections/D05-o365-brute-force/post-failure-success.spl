@@ -1,0 +1,9 @@
+source="o365_brute_force_login.json"
+UserId="bpatel@rodsoto.onmicrosoft.com"
+Operation="UserLoggedIn"
+ClientIP="73.15.72.101"
+| eval EventTime=strptime(substr(CreationTime,1,19),"%Y-%m-%dT%H:%M:%S")
+| where EventTime > strptime("2020-12-15 18:52:11","%Y-%m-%d %H:%M:%S")
+| eval Time=strftime(EventTime,"%Y-%m-%d %H:%M:%S")
+| sort EventTime
+| table Time Operation ResultStatus ClientIP

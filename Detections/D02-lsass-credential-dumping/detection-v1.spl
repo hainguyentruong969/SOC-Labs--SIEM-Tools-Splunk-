@@ -1,0 +1,12 @@
+sourcetype="window-sysmon2"
+| rex field=_raw "<EventID>(?<EventID>\d+)</EventID>"
+| rex field=_raw "<Computer>(?<Computer>[^<]+)</Computer>"
+| rex field=_raw "<Data Name='UtcTime'>(?<UtcTime>[^<]+)</Data>"
+| rex field=_raw "<Data Name='SourceProcessId'>(?<SourceProcessId>[^<]+)</Data>"
+| rex field=_raw "<Data Name='SourceImage'>(?<SourceImage>[^<]+)</Data>"
+| rex field=_raw "<Data Name='TargetProcessId'>(?<TargetProcessId>[^<]+)</Data>"
+| rex field=_raw "<Data Name='TargetImage'>(?<TargetImage>[^<]+)</Data>"
+| rex field=_raw "<Data Name='GrantedAccess'>(?<GrantedAccess>[^<]+)</Data>"
+| where EventID="10"
+| where match(lower(TargetImage),"\\\\lsass\.exe$")
+| table UtcTime Computer SourceProcessId SourceImage TargetProcessId TargetImage GrantedAccess

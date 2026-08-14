@@ -1,4 +1,4 @@
-# D06 - Remote Service Execution (RemCom)
+# D03 - Remote Service Execution (RemCom)
 
 ## Objective
 Detect and investigate Windows remote service execution behavior associated with RemCom from Sysmon process-creation telemetry.

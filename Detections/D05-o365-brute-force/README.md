@@ -1,4 +1,4 @@
-# D07 - O365 Brute Force Detection and Investigation
+# D05 - O365 Brute Force Detection and Investigation
 
 ## Objective
 Detect and investigate a Microsoft 365 credential attack by identifying bursts of failed logins against the same account, reconstructing the authentication timeline, checking for subsequent successful logins, and pivoting on the source IP to determine broader targeting.
